@@ -1,45 +1,50 @@
+def get_name():
+    while True:
+        name = input("Enter your name: ")
+
+        if not name:
+            print("Name input is empty")
+        else:
+            return name
+
+
+def get_phone():
+    while True:
+        tel = input("Enter your phone number: ")
+
+        if not tel:
+            print("Phone number input is empty")
+
+        elif not tel.isdigit():
+            print("Invalid input")
+
+        elif len(tel) != 9:
+            print("Invalid amount of numbers")
+
+        else:
+            return tel
+
+
+def get_email():
+    while True:
+        mail = input("Enter your email address: ")
+
+        if not mail:
+            print("Email input is empty")
+
+        elif "@" not in mail or "." not in mail:
+            print("Invalid email")
+
+        else:
+            return mail
 
 # # 1
 
 def add_contact():
 
-    contacts = []
-
-    while True:
-        name = str(input("Enter your name: "))
-
-        if len(name) == 0:
-            print("Name input is empty: ")
-        else:
-            break
-
-    while True:
-        tel = str(input("Enter your phone number: "))
-
-        if len(tel) == 0:
-            print("Phone number input is empty: ")
-        elif not tel.isdigit():
-            print("Invalid input")
-        elif len(tel) != 9:
-            print("Invalid amount of numbers")
-        else:
-            break
-
-    while True:
-
-        mail = str(input("Enter your email address: "))
-
-        if len(mail) == 0:
-            print("Email input is empty : ")
-        elif "@" not in mail or "." not in mail:
-            print("Invalid email")
-        else:
-            break
-
-
-    contacts.append(name)
-    contacts.append(tel)
-    contacts.append(mail)
+    name = get_name()
+    tel = get_phone()
+    mail = get_email()
 
     with open("contacts.txt", "a", encoding="utf-8") as file:
         file.write(f"Name: {name} | Telephone number: {tel} |Email: {mail}\n")
@@ -97,62 +102,33 @@ def delete_contact():
 
 def renew_contact():
 
-    renew_contact = input("Enter name or phone number of renewal contact: ")
-    file = open("contacts.txt", "r", encoding="utf-8")
-    lines = file.readlines()
-    file.close()
+    search = input("Enter name or phone number of renewal contact: ")
 
-    for line in lines:
+    with open("contacts.txt", "r", encoding="utf-8") as file:
+        lines = file.readlines()
 
-        if "Name: " + renew_contact in line or "Telephone number: " + renew_contact in line:
-            name = input("Enter name of renewal contact: ")
+    found = False
+    # пока что мы не нашли нужный контакт
 
-            while True:
-                tel = str(input("Enter phone number of renewal contact: "))
+    with open("contacts.txt", "w", encoding="utf-8") as file:
 
-                if len(tel) == 0:
-                    print("Phone number input is empty: ")
-                elif not tel.isdigit():
-                    print("Invalid input")
-                elif len(tel) != 9:
-                    print("Invalid amount of numbers")
-                else:
-                    break
+        for line in lines:
 
-            while True:
+            if search in line:
+                name = get_name()
+                tel = get_phone()
+                mail = get_email()
 
-                mail = str(input("Enter email address of renewal contact: "))
+                file.write(f"Name: {name} | Telephone number: {tel} |Email: {mail}\n")
+                found = True
 
-                if len(mail) == 0:
-                    print("Email input is empty : ")
-                elif "@" not in mail or "." not in mail:
-                    print("Invalid email")
-                else:
-                    break
+            else:
+                file.write(line)
 
-            file = open("contacts.txt", "w", encoding="utf-8")
-
-            for old_line in lines:
-                if "Name: " + renew_contact in old_line or "Telephone number: " + renew_contact in old_line:
-                    file.write("Name: " + name + " | Telephone number: " + tel + " | Email: " + mail + "\n")
-
-
-                if renew_contact in old_line:
-                    file.write("Name: " + name + " | Telephone number: " + tel + " | Email: " + mail + "\n")
-
-                else:
-                    file.write(old_line)
-
-            file.close()
-
-            print("Contact renewed successfully")
-            break
-
+    if found:
+        print("Contact updated")
     else:
         print("Contact not found")
-
-
-# ЕПТА Я 3 ЧАСА БОРОЛАСЬ С ЭТИМ ОБНОВЛЕНИЕМ КОНТАКТА !!!!!!!!!!!!!
 
 # 5
 
@@ -169,36 +145,40 @@ def show_contacts():
     for contact in lines:
         print(contact.strip())
 
-# obálka кода
+# obálka кода - main
+def main():
 
-while True:
+    while True:
 
-    print("1 - Add a contact")
-    print("2 - Search for a contact")
-    print("3 - Delete contact")
-    print("4 - Renew contact")
-    print("5 - Show sorted contacts")
-    print("6 - Exit")
+        print("1 - Add a contact")
+        print("2 - Search for a contact")
+        print("3 - Delete contact")
+        print("4 - Renew contact")
+        print("5 - Show sorted contacts")
+        print("6 - Exit")
 
-    choice = input("Choose number from menu: ")
+        choice = input("Choose number from menu: ")
 
-    if choice == "1":
-        add_contact()
+        if choice == "1":
+            add_contact()
 
-    elif choice == "2":
-        search_contact()
+        elif choice == "2":
+            search_contact()
 
-    elif choice == "3":
-        delete_contact()
+        elif choice == "3":
+            delete_contact()
 
-    elif choice == "4":
-        renew_contact()
+        elif choice == "4":
+            renew_contact()
 
-    elif choice == "5":
-        show_contacts()
+        elif choice == "5":
+            show_contacts()
 
-    elif choice == "6":
-        print("Programme is over. See you soon!")
+        elif choice == "6":
+            print("Programme is over. See you soon!")
+            break
 
-    else:
-        print("Invalid menu option")
+        else:
+            print("Invalid menu option")
+
+main()
