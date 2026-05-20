@@ -179,6 +179,6 @@ def main():
             break
 
         else:
-            print("Invalid menu option")
+            print("Invalid option")
 
 main()
